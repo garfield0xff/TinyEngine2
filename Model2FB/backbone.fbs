@@ -1,0 +1,33 @@
+namespace my_model;
+
+table Tensor {
+  shape:[int];
+  data:[float];
+}
+
+table Conv2DOptions {
+  activation_function:string;
+  padding:string;
+  strides:[int];
+}
+
+table Operator {
+  op_index:int;
+  op_name:string;
+  weights:Tensor;
+  bias:Tensor;
+  outputs:[int];
+  conv_options : [Conv2DOptions];
+}
+
+table SubGraph {
+  subgraph_index:int;
+  operators:[Operator];
+}
+
+table Model {
+  model_name:string;
+  subgraphs:[SubGraph];
+}
+
+root_type Model;
