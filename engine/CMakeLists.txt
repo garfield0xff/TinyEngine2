@@ -23,6 +23,7 @@ include_directories(${OpenCV_INCLUDE_DIRS})
 set(SOURCES
     src/main.cpp
     src/parser.cpp
+    src/validator.cpp
 )
 
 add_executable(TinyEngine ${SOURCES})

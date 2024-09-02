@@ -1,6 +1,16 @@
 #include "parser.h"
 
-void FBParser::loadFBFromFile(const char* filename) {
+// void FBParser::loadFBFromFile(const char* filename) {
+//     ifstream infile(filename, ios::binary | ios::ate );
+//     streamsize size = infile.tellg();
+//     infile.seekg(0, ios::beg);
+
+//     vector<char> buffer(size);
+//     auto model = my_model::GetModel(buffer.data());
+// }
+
+
+void FBParser::printSampleFBFromFile(const char* filename) {
 
     // ios::ate = file end point
     ifstream infile(filename, ios::binary | ios::ate );

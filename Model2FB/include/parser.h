@@ -21,9 +21,8 @@ private:
     const tflite::Model* tf_model;
     const tflite::SubGraph* getTFModelBackBone(const tflite::Model *tf_model);
     flatbuffers::Offset<my_model::Operator> parseConvLayer(
-        const tflite::SubGraph* tf_backbone , const tflite::Operator *op, const size_t op_index,
-        flatbuffers::FlatBufferBuilder &builder,  flatbuffers::Offset<my_model::Operator> fb_op_offset,
-        const char* conv_op
+        const tflite::SubGraph* tf_backbone, const tflite::Operator* op, const size_t op_index,
+        flatbuffers::FlatBufferBuilder& builder, const string& conv_op
     );
 
 public:

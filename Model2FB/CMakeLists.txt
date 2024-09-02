@@ -24,7 +24,6 @@ set(SOURCES
     src/main.cpp
     src/parser.cpp
     src/test_parser.cpp
-    
 )
 
 add_executable(CodeGenerator ${SOURCES})
