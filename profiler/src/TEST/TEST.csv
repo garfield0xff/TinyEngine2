@@ -1,0 +1,5 @@
+Index,Model Name,Client Name,Accurancy,Total Time(ms),CPU Usage(%),Memory Usage(KB)
+1,MobilenetV2,3,0,469.201,10.084,511852
+2,MobilenetV2,3,0,463.772,8.33333,511856
+3,MobilenetV2,4,0,482.981,8.33333,511856
+4,MobilenetV2,5,0,566.265,9.09091,511856

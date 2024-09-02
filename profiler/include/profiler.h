@@ -32,23 +32,30 @@ protected:
     chrono::high_resolution_clock::time_point stop_time;
     chrono::duration<double, milli> duration_time;
 
+    bool flag = false;
+    int index = -1;
+
     string image_path;
     string model_name;
-    double prediction;
+    string client_name;
+    double accurancy = 0.00;
+    double fps;
 
 
 public:
-    int index = -1;
-    bool flag = false;
-    int cnt_index();
+    int cnt_Index();
+    int read_LastIndexFromFirstColumn(string filename);
+
+    void start_Time();
+    void stop_Time();
+    double duration_Time();
+
+    void set_Modelname();
+    void write_Clientname();
+    void get_Accurancy();
+
     void displayMenu(profiler*);
 
-public:
-     void start_Time();
-     void stop_Time();
-     double duration_Time();
-     int cnt_Index();
-     int read_LastIndexFromFirstColumn(string filename);
 };
 
 #endif // _MEM_PROFILER_

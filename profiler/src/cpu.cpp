@@ -108,7 +108,7 @@ void* CPU::getLinuxCpuUsageMemory(void *arg) {
         pStat = fopen("/proc/stat", "r");
         if (pStat == NULL) {
             std::cerr << "Failed to open /proc/stat" << std::endl;
-            usleep(300000); 
+            usleep(400000); 
             continue;
         }
 
@@ -121,7 +121,7 @@ void* CPU::getLinuxCpuUsageMemory(void *arg) {
         diffJiffies.system = curJiffies.system - prevJiffies.system;
         diffJiffies.idle = curJiffies.idle - prevJiffies.idle;
 
-        int totalJiffies = diffJiffies.user + diffJiffies.nice + diffJiffies.system + diffJiffies.idle;
+        unsigned long totalJiffies = diffJiffies.user + diffJiffies.nice + diffJiffies.system + diffJiffies.idle;
         
          if (totalJiffies > 0) {
             cpu_instance->cpu_usage = 100.0f * (1.0 - (diffJiffies.idle / (double) totalJiffies));
@@ -133,7 +133,7 @@ void* CPU::getLinuxCpuUsageMemory(void *arg) {
         }
         prevJiffies = curJiffies;
         fclose(pStat);
-        usleep(50000);
+        usleep(100000);
     }
     return NULL;
 }
@@ -160,7 +160,7 @@ void CPU::endLinuxRuntimeThread() {
 
 // 제일 최근 측정 마친 CPU값 리턴
 float CPU::returnLinuxCpuUsageMemory() { 
-    return cpu_usage;
+    return cpu_max;
 }
 
 
