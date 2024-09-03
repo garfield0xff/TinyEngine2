@@ -32,9 +32,8 @@ const tflite::SubGraph* ModelParser::getTFModelBackBone(const tflite::Model *tf_
 
 
 flatbuffers::Offset<my_model::Operator> ModelParser::parseConvLayer(
-    const tflite::SubGraph* tf_backbone , const tflite::Operator *op, const size_t op_index,
-    flatbuffers::FlatBufferBuilder &builder,  flatbuffers::Offset<my_model::Operator> fb_op_offset,
-    const char* conv_op ) 
+    const tflite::SubGraph* tf_backbone, const tflite::Operator* op, const size_t op_index,
+    flatbuffers::FlatBufferBuilder& builder, const std::string& conv_op) 
 {
 
     auto filter_tensor = tf_backbone->tensors()->Get(op->inputs()->Get(1));
@@ -42,6 +41,7 @@ flatbuffers::Offset<my_model::Operator> ModelParser::parseConvLayer(
     auto filter_buffer = tf_model->buffers()->Get(filter_tensor->buffer());
     const float* filter_data = reinterpret_cast<const float*>(filter_buffer->data()->data());
     size_t filter_buffer_size = filter_buffer->data()->size() / sizeof(float);
+
     auto weight_tensor = my_model::CreateTensor(
         builder,
         builder.CreateVector(std::vector<int32_t>(filter_shape->begin(), filter_shape->end())),
@@ -53,31 +53,52 @@ flatbuffers::Offset<my_model::Operator> ModelParser::parseConvLayer(
     auto bias_buffer = tf_model->buffers()->Get(bias_tensor->buffer());
     const float* bias_data = reinterpret_cast<const float*>(bias_buffer->data()->data());
     size_t bias_buffer_size = bias_buffer->data()->size() / sizeof(float);
+
     auto fb_bias_tensor_offset = my_model::CreateTensor(
         builder,
         builder.CreateVector(std::vector<int32_t>(bias_shape->begin(), bias_shape->end())),
         builder.CreateVector(bias_data, bias_buffer_size)
     );
-         
-    auto conv_options = op->builtin_options_as_Conv2DOptions();
-    string act_func = (conv_options->fused_activation_function() == tflite::ActivationFunctionType_RELU6) ? "RELU6" : "NULL";
-    string pad = (conv_options->padding() == tflite::Padding_VALID) ? "VALID" : "SAME";
+
+    
+    const tflite::Conv2DOptions* conv2d_options = nullptr;
+    const tflite::DepthwiseConv2DOptions* depthwise_conv2d_options = nullptr;
+
+    if (conv_op == "Conv2D") {
+        conv2d_options = op->builtin_options_as_Conv2DOptions();
+    } else if (conv_op == "DepthwiseConv2D") {
+        depthwise_conv2d_options = op->builtin_options_as_DepthwiseConv2DOptions();
+    }
+
+    string act_func;
+    string pad;
+
+    if (conv2d_options) {
+        act_func = (conv2d_options->fused_activation_function() == tflite::ActivationFunctionType_RELU6) ? "RELU6" : "NULL";
+        pad = (conv2d_options->padding() == tflite::Padding_VALID) ? "VALID" : "SAME";
+    } else if(depthwise_conv2d_options) {
+        act_func = (depthwise_conv2d_options->fused_activation_function() == tflite::ActivationFunctionType_RELU6) ? "RELU6" : "NULL";
+        pad = (depthwise_conv2d_options->padding() == tflite::Padding_VALID) ? "VALID" : "SAME";
+    }
+
     auto fb_conv_options = my_model::CreateConv2DOptions(
         builder,
         builder.CreateString(act_func),
         builder.CreateString(pad),
-        builder.CreateVector(std::vector<int32_t>({1, 1}))
+        builder.CreateVector(vector<int32_t>({1, 1}))
     );
+
     auto fb_conv_options_vector = builder.CreateVector(
-        std::vector<flatbuffers::Offset<my_model::Conv2DOptions>>{fb_conv_options}
+        vector<flatbuffers::Offset<my_model::Conv2DOptions>>{fb_conv_options}
     );
 
     auto output_tensor = tf_backbone->tensors()->Get(op->outputs()->Get(0));
     auto output_shape = output_tensor->shape();
+
     return my_model::CreateOperator(
         builder,
         op_index,
-        builder.CreateString("Conv2D"),
+        builder.CreateString(conv_op),  // 연산자 이름을 전달
         weight_tensor,
         fb_bias_tensor_offset,
         builder.CreateVector(std::vector<int32_t>({
@@ -114,13 +135,20 @@ void ModelParser::parseBackBoneToFlatBuffer(const char* output_file_path, const 
         switch (opcode) {
         case tflite::BuiltinOperator_CONV_2D:
         {
-            fb_op_offset = parseConvLayer(tf_backbone, op, i, builder, fb_op_offset, "Conv2D");
+            fb_op_offset = parseConvLayer(tf_backbone, op, i, builder, "Conv2D");
             break;
         }
         case tflite::BuiltinOperator_DEPTHWISE_CONV_2D:
         {
-            
+            fb_op_offset = parseConvLayer(tf_backbone, op, i, builder, "DepthwiseConv2D");
+            break;
         }
+        // case tflite::BuiltinOperator_PAD:
+        // {
+        //     break;
+        // }
+
+        
 
         default:
             continue;  

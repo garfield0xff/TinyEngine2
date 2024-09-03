@@ -18,14 +18,12 @@ void profiler::start_Time() {
     profiler::start_time =  chrono::high_resolution_clock::now();
 }
 
-// 현재 프로파일러의 종료 시간을 기록합니다.
+
 void profiler::stop_Time() {
     profiler::stop_time =  chrono::high_resolution_clock::now();
     chrono::duration<double, milli> duration = stop_time - start_time;
     cout << "Execution time: " << duration.count() << " ms" << endl;
 }
-
-
 
 void profiler::displayMenu(profiler * p) {
         int ch;

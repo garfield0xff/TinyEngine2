@@ -12,7 +12,7 @@ int main()
 
     #if 0
     const char* model_path = "/Users/gyujinkim/Desktop/Ai/TinyEngine/code_generator/model/person_detection_model.tflite";
-    const char* output_file_path = "/Users/gyujinkim/Desktop/Ai/TinyEngine2/Paresr/backbone.bin";
+    const char* output_file_path = "/Users/gyujinkim/Desktop/Ai/TinyEngine2/Model2FB/backbone.bin";
     ModelParser* mp1 = new ModelParser(model_path);
     mp1->setTFModel(model_path);
     mp1->parseBackBoneToFlatBuffer(output_file_path, "person_detection");
