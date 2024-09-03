@@ -112,8 +112,6 @@ void profiler::displayMenu(profiler *p){
     // 알고리즘 실행하기
     else if (ch == '2'){
         if(!p->flag){
-            // c.startMacRuntimeThread();
-
             p->flag = true;
             set_Modelname();
             if(model_name == ""){
@@ -125,18 +123,12 @@ void profiler::displayMenu(profiler *p){
                 return;
             }
             m.printLinuxMemoryUsage(p->flag);
+            // c.startMacRuntimeThread();
             c.startLinuxRuntimeThread();
             p->start_Time();
         }
 
-        //cg1->parseTFModel(tf_model);
-
-        size_t large_size = 500 * 1024 * 1024; // 약 100 MB
-        char* large_array = new char[large_size];
-        for (size_t i = 0; i < large_size; ++i) {
-            large_array[i] = i;
-        }
-        get_Accurancy();
+        cg1->parseTFModel(tf_model); //
 
         if(p->flag){
             p->stop_Time();

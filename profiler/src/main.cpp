@@ -1,14 +1,14 @@
 #include <iostream>
 #include <stddef.h>
-//#include <opencv2/opencv.hpp>
+#include <opencv2/opencv.hpp> //
 
 #include "profiler.h"
 
-//using namespace cv;
+using namespace cv; //
 
 int main(void)
 {
-    /*const char* img_path = "/Users/gyujinkim/Desktop/Ai/TinyEngine/code_generator/test/notPerson1.png";
+    const char* img_path = "/Users/gyujinkim/Desktop/Ai/TinyEngine/code_generator/test/notPerson1.png";
     
     Mat img = imread(img_path);
 
@@ -27,7 +27,7 @@ int main(void)
 
     for(int i = 0; i < imageBuffer_size; ++i) {
         imageBuffer[i] = resize_img.at<float>(i);  
-    }*/
+    } //
 
     profiler p;
 
@@ -35,7 +35,7 @@ int main(void)
         p.displayMenu(&p);
     }
 
-    //delete[] imageBuffer;
+    delete[] imageBuffer; //
 
     return 0;
 }
