@@ -1,13 +1,10 @@
 #include <iostream>
 #include <stddef.h>
-#include <opencv2/opencv.hpp>
-
+#include <opencv2/opencv.hpp> //
 
 #include "profiler.h"
 
-
-// using namespace std;
-using namespace cv;
+using namespace cv; //
 
 int main(void)
 {
@@ -30,7 +27,7 @@ int main(void)
 
     for(int i = 0; i < imageBuffer_size; ++i) {
         imageBuffer[i] = resize_img.at<float>(i);  
-    }
+    } //
 
     profiler p;
 
@@ -38,7 +35,7 @@ int main(void)
         p.displayMenu(&p);
     }
 
-    delete[] imageBuffer;
+    delete[] imageBuffer; //
 
     return 0;
 }

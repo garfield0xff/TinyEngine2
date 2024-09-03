@@ -13,17 +13,20 @@
 #elif __linux__
     #include "sys/sysinfo.h"
 #endif
+using namespace std;
 
-
-
-// using namespace std;
 
 class Memory {
     private:
-        std::string rss;
+        static long rss[2];
     
     public:
+    #ifdef __APPLE__
         void printMemoryUsage();
+    #elif __linux__
+        void printLinuxMemoryUsage(bool flag);
+        long calLinuxMemorydiff();
+    #endif
 };
 
 
