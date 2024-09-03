@@ -10,6 +10,7 @@ using namespace std;
 
 class FBParser {
     public:
+        void printSampleFBFromFile(const char *filename);
         void loadFBFromFile(const char *filename);
 };
 

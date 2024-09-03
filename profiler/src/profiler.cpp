@@ -149,6 +149,15 @@ void profiler::displayMenu(profiler *p){
 
     // CSV 삭제 메뉴
     else if (ch == '3'){
+
+void profiler::stop_Time() {
+    profiler::stop_time =  chrono::high_resolution_clock::now();
+    chrono::duration<double, milli> duration = stop_time - start_time;
+    cout << "Execution time: " << duration.count() << " ms" << endl;
+}
+
+void profiler::displayMenu(profiler * p) {
+        int ch;
         cout << "+++++++++++++++++++++++++++++++++++++++++++++" << endl;
         cout << "             Profiler Manager                " << endl;
         cout << "+++++++++++++++++++++++++++++++++++++++++++++" << endl;
