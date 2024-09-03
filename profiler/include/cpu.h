@@ -18,7 +18,7 @@
     #include <sys/types.h>
 #endif
 
-// using namespace std;
+using namespace std;
 
 class CPU {
     private:
@@ -41,11 +41,14 @@ class CPU {
             static void* getMacCpuUsageMemory(void *arg);
             void startMacRuntimeThread();
             void endMacRuntimeThread();
+            float returnMacCpuUsageMemory();
         #elif __linux__
             static void* getLinuxCpuUsageMemory(void *arg);
             void startLinuxRuntimeThread();
             void endLinuxRuntimeThread();
+            float returnLinuxCpuUsageMemory();
         #endif
+        
 
 };
 
