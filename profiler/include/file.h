@@ -15,7 +15,7 @@ private:
     
 
 public:
-    string file_path = "/Users/gyujinkim/Desktop/Ai/TinyEngine2/profiler/TEST/TEST.csv";
+    string file_path = "TEST/TEST.csv";
     string get_Path();
     void set_Path();
     bool isFileEmpty(const string& filename);

@@ -27,7 +27,6 @@ class Memory {
         void printLinuxMemoryUsage(bool flag);
         long calLinuxMemorydiff();
     #endif
-
     long calMemorydiff();
 };
 

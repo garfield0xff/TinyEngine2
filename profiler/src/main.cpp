@@ -27,7 +27,9 @@ int main(void)
 
     for(int i = 0; i < imageBuffer_size; ++i) {
         imageBuffer[i] = resize_img.at<float>(i);  
+
     } 
+}
 
     profiler p;
 
@@ -35,7 +37,8 @@ int main(void)
         p.displayMenu(&p);
     }
 
-    delete[] imageBuffer; 
+
+    delete[] imageBuffer; //
 
     return 0;
 }
