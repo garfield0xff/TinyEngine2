@@ -22,11 +22,12 @@ class Memory {
     
     public:
     #ifdef __APPLE__
-        void printMemoryUsage();
+        void printMacMemoryUsage(bool flag);
     #elif __linux__
         void printLinuxMemoryUsage(bool flag);
         long calLinuxMemorydiff();
     #endif
+    long calMemorydiff();
 };
 
 

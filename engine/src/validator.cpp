@@ -29,7 +29,6 @@ void Validator::validate_cnn1x1_PAD_RELU6(
     
     const int tile_size = 4;
 
-    // Loop Unrolling, Operation Fusion, Tiling 
     for (int oc = 0; oc < o_ch; oc += tile_size) {
         for (int oh = 0; oh < o_height; ++oh) {
             for (int ow = 0; ow < o_width; ++ow) {
@@ -39,7 +38,6 @@ void Validator::validate_cnn1x1_PAD_RELU6(
                     int i_index = oh * o_width + ow;
                     const float* weight_ptr = k_weights + (oc + t) * k_size;
 
-                    // 루프 언롤링 및 연산 수행
                     for (int ic = 0; ic <= i_ch - 4; ic += 4) {
                         sums[t] += col_data[i_index * i_ch + ic] * weight_ptr[ic] +
                                    col_data[i_index * i_ch + ic + 1] * weight_ptr[ic + 1] +
@@ -85,14 +83,12 @@ void Validator::validate_depthwise_cnn1x1_PAD_RELU6(
         }
     }
 
-    // 타일 크기 (임의의 값, 하드웨어에 맞춰 조정 가능)
+    
     const int tile_size = 4;
 
-    // Loop Unrolling, Operation Fusion, Tiling 
     for (int ic = 0; ic < i_ch; ic += tile_size) {
         for (int oh = 0; oh < o_height; ++oh) {
             for (int ow = 0; ow < o_width; ++ow) {
-                // loop unorlling
                 float sums[tile_size] = {0};
 
                 for (int t = 0; t < tile_size && ic + t < i_ch; ++t) {

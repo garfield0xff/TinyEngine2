@@ -143,10 +143,15 @@ void ModelParser::parseBackBoneToFlatBuffer(const char* output_file_path, const 
             fb_op_offset = parseConvLayer(tf_backbone, op, i, builder, "DepthwiseConv2D");
             break;
         }
-        // case tflite::BuiltinOperator_PAD:
-        // {
-        //     break;
-        // }
+        case tflite::BuiltinOperator_PAD:
+        {
+            
+            break;
+        }
+        case tflite::BuiltinOperator_ADD:
+        {
+            break;
+        }
 
         
 

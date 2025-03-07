@@ -1,10 +1,10 @@
 #include <iostream>
 #include <stddef.h>
-#include <opencv2/opencv.hpp> //
+#include <opencv2/opencv.hpp> 
 
 #include "profiler.h"
 
-using namespace cv; //
+using namespace cv; 
 
 int main(void)
 {
@@ -27,13 +27,16 @@ int main(void)
 
     for(int i = 0; i < imageBuffer_size; ++i) {
         imageBuffer[i] = resize_img.at<float>(i);  
-    } //
+
+    } 
+}
 
     profiler p;
 
     while(1){
         p.displayMenu(&p);
     }
+
 
     delete[] imageBuffer; //
 
