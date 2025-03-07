@@ -80,10 +80,15 @@ void CPU::endMacRuntimeThread() {
     }
 }
 
+float CPU::returnMacCpuUsageMemory(){
+    return cpu_usage;
+}
+
 
 #elif __linux__
 
-void* CPU::getLinuxCpuUsageMemory(void *arg) {
+// 리눅스 시스템 파일에서 CPU 정보 찾기
+void* CPU::getLinuxCpuUsageMemory(void *arg) {      
     CPU* cpu_instance = static_cast<CPU*>(arg); 
     FILE *pStat = NULL;
     char cpuID[6] = {0};
@@ -99,62 +104,63 @@ void* CPU::getLinuxCpuUsageMemory(void *arg) {
         fclose(pStat);
     }
 
-    while (cpu_instance->running) {  // 스레드 실행 상태 확인
+    while (cpu_instance->th_is_running) {  // 스레드 실행 상태 확인
         pStat = fopen("/proc/stat", "r");
         if (pStat == NULL) {
-            cerr << "Failed to open /proc/stat" << endl;
-            usleep(300000); 
+            std::cerr << "Failed to open /proc/stat" << std::endl;
+            usleep(400000); 
             continue;
         }
 
         fscanf(pStat, "%s %d %d %d %d", cpuID, &curJiffies.user,
                &curJiffies.nice, &curJiffies.system, &curJiffies.idle);
 
-        stJiffies diffJiffies;
+        Jiffies diffJiffies;
         diffJiffies.user = curJiffies.user - prevJiffies.user;
         diffJiffies.nice = curJiffies.nice - prevJiffies.nice;
         diffJiffies.system = curJiffies.system - prevJiffies.system;
         diffJiffies.idle = curJiffies.idle - prevJiffies.idle;
 
-        int totalJiffies = diffJiffies.user + diffJiffies.nice + diffJiffies.system + diffJiffies.idle;
-
+        unsigned long totalJiffies = diffJiffies.user + diffJiffies.nice + diffJiffies.system + diffJiffies.idle;
+        
          if (totalJiffies > 0) {
             cpu_instance->cpu_usage = 100.0f * (1.0 - (diffJiffies.idle / (double) totalJiffies));
-            if(cpu_instance->cpu_max < cpu_instance->cpu_usage){
+            if(cpu_instance->cpu_max < cpu_instance->cpu_usage){ // CPU 최대값 구하기
                 cpu_instance->cpu_max = cpu_instance->cpu_usage;
             }
         } else {
             cpu_instance->cpu_usage = 0.0f;  // default 값을 설정하거나 에러를 처리
         }
-
-        //printf("Cpu usage : %.2f%%\n", cpu_instance->cpu_usage);
-
         prevJiffies = curJiffies;
         fclose(pStat);
-
-        usleep(50000); // 루프 반복을 늦추기 위해 잠시 대기
-
-        //printf("------------------------\n");
+        usleep(100000);
     }
     return NULL;
 }
 
+// CPU 측정 스레드 실행시작
 void CPU::startLinuxRuntimeThread() {
     th_is_running = true;  // 스레드가 실행 중임을 표시
-    int res = pthread_create(&cpu_thread, NULL, monitor_cpu_usage, this);
+    int res = pthread_create(&cpu_thread, NULL, getLinuxCpuUsageMemory, this);
     if (res != 0) {
         std::cerr << "Failed to create thread: " << res << std::endl;
         std::exit(EXIT_FAILURE);
     }
 }
 
-void CPU::endLinuxRuntimeThread() {
+// CPU 측정 스레드 실행종료
+void CPU::endLinuxRuntimeThread() { 
     if (th_is_running) {
         th_is_running = false;  // 스레드 종료 신호를 보냄
         pthread_join(cpu_thread, NULL);  // 스레드가 종료될 때까지 대기
         printf("Cpu usage : %.2f%%\n", cpu_max);
         std::cout << "CPU monitoring thread has been terminated." << std::endl;
     }
+}
+
+// 제일 최근 측정 마친 CPU값 리턴
+float CPU::returnLinuxCpuUsageMemory() { 
+    return cpu_max;
 }
 
 
