@@ -1,33 +1,29 @@
 cmake_minimum_required(VERSION 3.10)
-project(TinyEngine)
+project(TensorFlowLiteExample)
 
-set(CMAKE_CXX_STANDARD 17)
+# C++ 표준 설정
+set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(OpenCV REQUIRED)
-find_package(nlohmann_json 3.11.0 REQUIRED)
+set(TFLITE_DIR "tensorflow-lite/tensorflow-master")
+set(FLATBUFFERS_INCLUDE_DIR "/usr/local/include")
+set(FLATBUFFERS_LIB_DIR "/usr/local/lib")
 
+include_directories(${TFLITE_DIR})
+include_directories(${TFLITE_DIR}/tensorflow/lite)
+include_directories(${TFLITE_DIR}/tensorflow/lite/tools/make/downloads/flatbuffers/include)
 
-set(TFLITE_LIB_PATH "/Users/gyujinkim/Desktop/Ai/TinyEngine/code_generator/tensorflow/bazel-bin/tensorflow/lite")
-set(TFLITE_INCLUDE_PATH "/Users/gyujinkim/Desktop/Ai/TinyEngine/code_generator/tensorflow")
-
-set(FLATBUFFERS_INCLUDE_DIR "/opt/homebrew/include")
-set(FLATBUFFERS_LIB_DIR "/opt/homebrew/lib")
-
-
-include_directories(${TFLITE_INCLUDE_PATH} ${FLATBUFFERS_INCLUDE_DIR})
-link_directories(${TFLITE_LIB_PATH} ${FLATBUFFERS_LIB_DIR})
-
-include_directories(${OpenCV_INCLUDE_DIRS})
-
-
-set(SOURCES
-    src/main.cpp
-    src/parser.cpp
-    src/validator.cpp
+add_library(tensorflowlite STATIC
+    ${TFLITE_DIR}/tensorflow/lite/core/api/error_reporter.cc
+    ${TFLITE_DIR}/tensorflow/lite/core/api/op_resolver.cc
+    ${TFLITE_DIR}/tensorflow/lite/interpreter.cc
+    ${TFLITE_DIR}/tensorflow/lite/kernels/kernel_util.cc
+    ${TFLITE_DIR}/tensorflow/lite/model.cc
+    ${TFLITE_DIR}/tensorflow/lite/kernels/register.cc
+    ${TFLITE_DIR}/tensorflow/lite/tools/make/downloads/flatbuffers/src/flatbuffers.cpp
 )
 
-add_executable(TinyEngine ${SOURCES})
+add_executable(TensorFlowLiteExample src/main.cpp)
 
-target_link_libraries(TinyEngine tensorflowlite flatbuffers  nlohmann_json::nlohmann_json ${OpenCV_LIBS})
-
-target_include_directories(TinyEngine PRIVATE ${PROJECT_SOURCE_DIR}/include ${FLATBUFFERS_INCLUDE_DIR} ${OpenCV_INCLUDE_DIRS})
+target_link_libraries(TensorFlowLiteExample tensorflowlite flatbuffers  ${OpenCV_LIBS})
+target_include_directories(TensorFlowLiteExample PRIVATE ${PROJECT_SOURCE_DIR}/include ${FLATBUFFERS_INCLUDE_DIR} ${OpenCV_INCLUDE_DIRS})

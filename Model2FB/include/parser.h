@@ -8,12 +8,10 @@
 #include <tensorflow/lite/kernels/register.h>
 #include <tensorflow/lite/model.h>
 #include <tensorflow/lite/schema/schema_generated.h>
-#include <nlohmann/json.hpp>
 #include <flatbuffers/flatbuffers.h>
 #include <model_generated.h>
 
 using namespace std;
-using json = nlohmann::json;
 
 class ModelParser {
 private:
