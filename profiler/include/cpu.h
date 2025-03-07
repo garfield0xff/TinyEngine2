@@ -48,6 +48,7 @@ class CPU {
             void endLinuxRuntimeThread();
             float returnLinuxCpuUsageMemory();
         #endif
+        
 
 };
 

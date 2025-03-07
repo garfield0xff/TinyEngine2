@@ -3,7 +3,6 @@
 #include "cpu.h"
 #include "file.h"
 
-// 현재의 인덱스 출력 및 반환
 int profiler::cnt_Index(){
     File f;
     index = read_LastIndexFromFirstColumn(f.get_Path());
@@ -12,7 +11,6 @@ int profiler::cnt_Index(){
     return index;
 }
 
-// CSV파일에서 존재하는 마지막 인덱스
 int profiler::read_LastIndexFromFirstColumn(string filename){
     ifstream file(filename);
     if (!file.is_open()){
@@ -21,7 +19,6 @@ int profiler::read_LastIndexFromFirstColumn(string filename){
     }
     string line;
     int lastindex = 0;
-    // 첫 번째 줄은 건너뜀. (소제목 부분이므로)
     getline(file, line);
     while (getline(file, line)){
         istringstream stream(line);
@@ -136,13 +133,15 @@ void profiler::displayMenu(profiler *p){
 
             // c.endMacRuntimeThread();
 
+
             m.printLinuxMemoryUsage(p->flag);
             c.endLinuxRuntimeThread();
             delete [] large_array;
         }
 
-        // 측정 내용 CSV에 작성하기
+
         f.write_Data(cnt_Index(), model_name, client_name, accurancy, duration_Time(), 
+
                     c.returnLinuxCpuUsageMemory(),
                     m.calLinuxMemorydiff());
     }
@@ -196,4 +195,6 @@ void profiler::displayMenu(profiler *p){
         return;
     }
     cout << endl;
+
 }
+
