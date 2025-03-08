@@ -4,6 +4,9 @@ This project is designed to parse AI Model(tensorflow, torch) using tvm library 
 This project was created with reference to TinyEngine by MIT HAN Lab 
 [Link](https://github.com/mit-han-lab/tinyengine)
 
+## PIPELINE
+<img width="800" alt="Image" src="https://github.com/user-attachments/assets/3e1dd5d1-3e23-4dfa-b87f-13308f78f833" />
+
 ## TEAM
 - 김규진 (Kim Gyu Jin) [Github](https://github.com/garfield0xff) email : garfield0xff@gmail.com
 - 김한빈 (Kim Han bin) [Github](https://github.com/hanbeen00)
